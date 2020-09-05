@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <input type="text" id="message"/>
+    <button type="button" name="button" onclick="send()">Send</button>
+    <ul id='messageList'>
+
+    </ul>
+
+  </body>
+  <script type="text/javascript">
+    let socket  = new WebSocket('ws://localhost:8080');
+
+    const messageInput = document.getElementById('message');
+
+    const messageList = document.getElementById('messageList');
+
+
+    let addMessage=(message)=>{
+      const node = document.createElement("LI");
+      const textNode = document.createTextNode(message);
+      node.appendChild(textNode);
+      messageList.appendChild(node);
+    }
+
+
+    let send=()=>{
+      socket.send(messageInput.value);
+      addMessage(messageInput.value)
+    }
+
+    socket.onmessage=(e)=>{
+      addMessage(e.data);
+    }
+
+  </script>
+</html>
